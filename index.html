@@ -7,53 +7,38 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <h1>Find Your Perfect Product</h1>
-      <p>Filter and explore products that fit your needs.</p>
-    </div>
+  <header>
+    <h1>Find Your Perfect Product</h1>
   </header>
 
-  <main class="main-content">
-    <div class="container">
-      <section class="filter-section">
-        <h2>Filter Preferences</h2>
-        <div class="form-group">
-          <label for="budget">Select Your Budget:</label>
-          <input type="range" id="budget" min="10000" max="50000" step="5000" value="30000">
-          <span id="budget-value">$30,000</span>
-        </div>
+  <main>
+    <section id="filters">
+      <h2>Filter Preferences</h2>
+      <label for="budget">Budget:</label>
+      <input type="range" id="budget" min="10000" max="50000" step="5000" value="30000">
+      <span id="budget-value">$30,000</span>
 
-        <div class="form-group">
-          <label>Choose Type(s):</label>
-          <div class="checkbox-group">
-            <input type="checkbox" id="suv" value="SUV" checked>
-            <label for="suv">SUV</label>
-            <input type="checkbox" id="sedan" value="Sedan">
-            <label for="sedan">Sedan</label>
-            <input type="checkbox" id="truck" value="Truck">
-            <label for="truck">Truck</label>
-          </div>
-        </div>
+      <fieldset>
+        <legend>Type:</legend>
+        <input type="checkbox" id="suv" checked>
+        <label for="suv">SUV</label>
+        <input type="checkbox" id="sedan">
+        <label for="sedan">Sedan</label>
+        <input type="checkbox" id="truck">
+        <label for="truck">Truck</label>
+      </fieldset>
 
-        <div class="form-group">
-          <label for="search">Search by Name:</label>
-          <input type="text" id="search" placeholder="Enter product name...">
-        </div>
+      <label for="search">Search by Name:</label>
+      <input type="text" id="search" placeholder="Search...">
 
-        <div class="form-actions">
-          <button id="submit" class="btn">Get Recommendations</button>
-          <button id="clear-filters" class="btn btn-secondary">Clear Filters</button>
-        </div>
-      </section>
+      <button id="submit">Get Recommendations</button>
+      <button id="clear-filters">Clear Filters</button>
+    </section>
 
-      <section class="recommendations-section">
-        <h2>Recommendations</h2>
-        <div id="recommendations" class="recommendations-grid">
-          <!-- Recommendations will be dynamically added here -->
-        </div>
-      </section>
-    </div>
+    <section id="recommendations">
+      <h2>Your Recommendations</h2>
+      <div id="recommendation-list"></div>
+    </section>
   </main>
 
   <script src="app.js"></script>
