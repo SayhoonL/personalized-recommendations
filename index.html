@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personalized Recommendations</title>
+  <title>Enhanced Recommendations</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>Find Your Perfect Product</h1>
   </header>
 
   <main>
@@ -28,8 +27,12 @@
         <label for="truck">Truck</label>
       </fieldset>
 
-      <label for="search">Search by Name:</label>
-      <input type="text" id="search" placeholder="Search...">
+      <label for="sort">Sort By:</label>
+      <select id="sort">
+        <option value="none">None</option>
+        <option value="low-to-high">Price: Low to High</option>
+        <option value="high-to-low">Price: High to Low</option>
+      </select>
 
       <button id="submit">Get Recommendations</button>
       <button id="clear-filters">Clear Filters</button>
@@ -39,8 +42,13 @@
       <h2>Your Recommendations</h2>
       <div id="recommendation-list"></div>
     </section>
-  </main>
 
+    <section id="favorites">
+      <h2>Your Favorites</h2>
+      <div id="favorite-list"></div>
+    </section>
+  </main>
+  
   <script src="app.js"></script>
 </body>
 </html>

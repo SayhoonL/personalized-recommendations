@@ -10,57 +10,58 @@ const products = [
   // DOM Elements
   const budgetInput = document.getElementById("budget");
   const budgetValue = document.getElementById("budget-value");
-  const recommendationsDiv = document.getElementById("recommendations");
-  const searchInput = document.getElementById("search");
-  const submitButton = document.getElementById("submit");
+  const recommendationsDiv = document.getElementById("recommendation-list");
+  const favoritesDiv = document.getElementById("favorite-list");
+  const sortInput = document.getElementById("sort");
   const clearButton = document.getElementById("clear-filters");
   
-  // Update budget display dynamically
+  // Persistent Preferences
+  const savedPreferences = JSON.parse(localStorage.getItem("preferences")) || {};
+  
+  // Initialize App
+  document.addEventListener("DOMContentLoaded", () => {
+    loadPreferences();
+    renderRecommendations(products);
+  });
+  
+  // Update Budget Display
   budgetInput.addEventListener("input", () => {
     budgetValue.textContent = `$${parseInt(budgetInput.value).toLocaleString()}`;
   });
   
-  // Generate recommendations
-  submitButton.addEventListener("click", () => {
+  const submitButton = document.getElementById("submit");
+
+    submitButton.addEventListener("click", () => {
     const selectedBudget = parseInt(budgetInput.value);
     const selectedTypes = [];
     if (document.getElementById("suv").checked) selectedTypes.push("SUV");
     if (document.getElementById("sedan").checked) selectedTypes.push("Sedan");
     if (document.getElementById("truck").checked) selectedTypes.push("Truck");
-    const searchQuery = searchInput.value.toLowerCase();
-  
-    // Filter products based on user preferences
+
     const filteredProducts = products.filter(
+        (product) =>
+        selectedTypes.includes(product.type) && product.price <= selectedBudget
+    );
+
+    renderRecommendations(filteredProducts);
+    });
+  // Generate Recommendations
+  function renderRecommendations(filteredProducts) {
+    const selectedBudget = parseInt(budgetInput.value);
+    const selectedTypes = [];
+    if (document.getElementById("suv").checked) selectedTypes.push("SUV");
+    if (document.getElementById("sedan").checked) selectedTypes.push("Sedan");
+    if (document.getElementById("truck").checked) selectedTypes.push("Truck");
+  
+    const filtered = filteredProducts.filter(
       (product) =>
-        selectedTypes.includes(product.type) &&
-        product.price <= selectedBudget &&
-        product.name.toLowerCase().includes(searchQuery)
+        selectedTypes.includes(product.type) && product.price <= selectedBudget
     );
   
-    renderRecommendations(filteredProducts);
-  });
+    const sorted = sortProducts(filtered, sortInput.value);
   
-  // Clear filters and reset recommendations
-  clearButton.addEventListener("click", () => {
-    budgetInput.value = 30000;
-    budgetValue.textContent = "$30,000";
-    document.getElementById("suv").checked = true;
-    document.getElementById("sedan").checked = false;
-    document.getElementById("truck").checked = false;
-    searchInput.value = "";
     recommendationsDiv.innerHTML = "";
-  });
-  
-  // Render recommendations in the grid
-  function renderRecommendations(products) {
-    recommendationsDiv.innerHTML = "";
-  
-    if (products.length === 0) {
-      recommendationsDiv.innerHTML = "<p>No products match your preferences. Try adjusting your filters.</p>";
-      return;
-    }
-  
-    products.forEach((product) => {
+    sorted.forEach((product) => {
       const productDiv = document.createElement("div");
       productDiv.className = "recommendation-item";
       productDiv.innerHTML = `
@@ -68,8 +69,63 @@ const products = [
         <p>Type: ${product.type}</p>
         <p>Price: $${product.price.toLocaleString()}</p>
         <p>${product.description}</p>
+        <button onclick="addFavorite(${product.id})">Favorite</button>
       `;
       recommendationsDiv.appendChild(productDiv);
     });
+  }
+  
+  // Add to Favorites
+  function addFavorite(productId) {
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    if (!favorites.includes(productId)) {
+      favorites.push(productId);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      renderFavorites();
+    }
+  }
+  
+  // Render Favorites
+  function renderFavorites() {
+    const favoriteIds = JSON.parse(localStorage.getItem("favorites")) || [];
+    favoritesDiv.innerHTML = "";
+  
+    favoriteIds.forEach((id) => {
+      const product = products.find((p) => p.id === id);
+      const favoriteDiv = document.createElement("div");
+      favoriteDiv.className = "favorite-item";
+      favoriteDiv.innerHTML = `
+        <h3>${product.name}</h3>
+        <p>Type: ${product.type}</p>
+        <p>Price: $${product.price.toLocaleString()}</p>
+        <button onclick="removeFavorite(${id})">Remove</button>
+      `;
+      favoritesDiv.appendChild(favoriteDiv);
+    });
+  }
+  
+  // Remove from Favorites
+  function removeFavorite(productId) {
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    favorites = favorites.filter((id) => id !== productId);
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    renderFavorites();
+  }
+  
+  // Sort Products
+  function sortProducts(products, order) {
+    if (order === "low-to-high") {
+      return products.sort((a, b) => a.price - b.price);
+    }
+    if (order === "high-to-low") {
+      return products.sort((a, b) => b.price - a.price);
+    }
+    return products;
+  }
+  
+  // Load Preferences
+  function loadPreferences() {
+    if (savedPreferences.budget) budgetInput.value = savedPreferences.budget;
+    renderFavorites();
   }
   
