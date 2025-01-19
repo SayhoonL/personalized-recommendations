@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalized Recommendations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+    }
+    #preferences-form {
+      margin-bottom: 20px;
+    }
+    .recommendation {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #f9f9f9;
+    }
+    .recommendation h3 {
+      margin: 0 0 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Find Your Perfect Product</h1>
+  <div id="preferences-form">
+    <label for="budget">Select Your Budget:</label><br />
+    <input type="range" id="budget" min="10000" max="50000" step="5000" value="30000" />
+    <span id="budget-value">$30,000</span>
+    <br /><br />
+
+    <label for="type">Choose a Type:</label><br />
+    <select id="type">
+      <option value="SUV">SUV</option>
+      <option value="Sedan">Sedan</option>
+      <option value="Truck">Truck</option>
+    </select>
+    <br /><br />
+
+    <button id="submit">Get Recommendations</button>
+  </div>
+
+  <h2>Recommendations:</h2>
+  <div id="recommendations"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
